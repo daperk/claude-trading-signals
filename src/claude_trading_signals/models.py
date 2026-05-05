@@ -5,7 +5,7 @@ from datetime import datetime, timezone
 from decimal import Decimal
 from enum import Enum
 
-from pydantic import BaseModel, Field, ValidationInfo, field_validator
+from pydantic import BaseModel, Field, model_validator
 
 
 class SignalDirection(str, Enum):
@@ -24,13 +24,11 @@ class OHLCV(BaseModel):
     close: Decimal
     volume: Decimal
 
-    @field_validator("high")
-    @classmethod
-    def _high_must_be_gte_low(cls, v: Decimal, info: ValidationInfo) -> Decimal:
-        low = info.data.get("low")
-        if low is not None and v < low:
-            raise ValueError(f"high ({v}) must be >= low ({low})")
-        return v
+    @model_validator(mode="after")
+    def _check_high_low(self) -> "OHLCV":
+        if self.high < self.low:
+            raise ValueError(f"high ({self.high}) must be >= low ({self.low})")
+        return self
 
 
 class MarketContext(BaseModel):
