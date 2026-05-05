@@ -25,7 +25,7 @@ class OHLCV(BaseModel):
     volume: Decimal
 
     @model_validator(mode="after")
-    def _check_high_low(self) -> "OHLCV":
+    def _check_high_low(self) -> OHLCV:
         if self.high < self.low:
             raise ValueError(f"high ({self.high}) must be >= low ({self.low})")
         return self

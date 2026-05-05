@@ -6,7 +6,7 @@ Set ANTHROPIC_API_KEY in your environment, then run:
 from datetime import datetime, timedelta, timezone
 from decimal import Decimal
 
-from claude_trading_signals import MarketContext, OHLCV, SignalGenerator
+from claude_trading_signals import OHLCV, MarketContext, SignalGenerator
 
 
 def make_demo_candles() -> list[OHLCV]:
